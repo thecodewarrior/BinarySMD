@@ -1,4 +1,4 @@
-package dev.thecodewarrior.binarysmd;
+package dev.thecodewarrior.binarysmd.studiomdl;
 
 import dev.thecodewarrior.binarysmd.tokenizer.Tokenizer;
 import org.jetbrains.annotations.NotNull;
@@ -9,15 +9,6 @@ import java.util.Objects;
 
 public class NodesBlock extends SMDFileBlock {
     public @NotNull List<@NotNull Bone> bones = new ArrayList<>();
-
-    public NodesBlock(@NotNull Tokenizer file) {
-        while(!file.current().test("end")) {
-            bones.add(new Bone(file.next().toInt(), file.next().toString(), file.next().toInt()));
-            file.next().expectLine();
-        }
-        file.next().expect("end");
-        file.next().expectLine();
-    }
 
     public static class Bone {
         public int id;

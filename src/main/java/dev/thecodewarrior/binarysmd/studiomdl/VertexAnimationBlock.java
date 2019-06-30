@@ -1,6 +1,5 @@
-package dev.thecodewarrior.binarysmd;
+package dev.thecodewarrior.binarysmd.studiomdl;
 
-import dev.thecodewarrior.binarysmd.tokenizer.Tokenizer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -9,31 +8,6 @@ import java.util.Objects;
 
 public class VertexAnimationBlock extends SMDFileBlock {
     public @NotNull List<@NotNull Keyframe> keyframes = new ArrayList<>();
-
-    public VertexAnimationBlock(Tokenizer file) {
-        if(file.current().test("end")) {
-            file.advance().next().expectLine();
-        }
-        file.current().expect("time");
-
-        Keyframe keyframe = new Keyframe(-1); // this temporary keyframe is immediately overwritten
-        while(!file.current().test("end")) {
-            if(file.current().test("time")) {
-                keyframe = new Keyframe(file.advance().next().toInt());
-                keyframes.add(keyframe);
-            } else {
-                keyframe.states.add(
-                        new VertexState(file.next().toInt(),
-                                file.next().toFloat(), file.next().toFloat(), file.next().toFloat(),
-                                file.next().toFloat(), file.next().toFloat(), file.next().toFloat()
-                        )
-                );
-            }
-            file.next().expectLine();
-        }
-        file.next().expect("end");
-        file.next().expectLine();
-    }
 
     public static class Keyframe {
         public int time;

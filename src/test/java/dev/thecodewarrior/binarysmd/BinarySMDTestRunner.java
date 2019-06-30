@@ -1,10 +1,8 @@
 package dev.thecodewarrior.binarysmd;
 
+import dev.thecodewarrior.binarysmd.formats.SMDTextFormat;
+import dev.thecodewarrior.binarysmd.studiomdl.SMDFile;
 import org.junit.Test;
-import org.junit.experimental.theories.DataPoints;
-import org.junit.experimental.theories.Theories;
-import org.junit.experimental.theories.Theory;
-import org.junit.runner.RunWith;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,7 +22,7 @@ public class BinarySMDTestRunner {
     @Test
     public void temporaryTest() throws FileNotFoundException {
         BufferedReader reader = new BufferedReader(new FileReader(new File("test.smd")));
-        StudiomdlFile parsed = new StudiomdlFile(reader);
+        SMDFile parsed = new SMDTextFormat().read(reader);
         System.out.println(parsed.hashCode());
     }
 }

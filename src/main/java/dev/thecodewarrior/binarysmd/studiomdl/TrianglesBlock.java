@@ -1,6 +1,5 @@
-package dev.thecodewarrior.binarysmd;
+package dev.thecodewarrior.binarysmd.studiomdl;
 
-import dev.thecodewarrior.binarysmd.tokenizer.Tokenizer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -9,40 +8,6 @@ import java.util.Objects;
 
 public class TrianglesBlock extends SMDFileBlock {
     public @NotNull List<@NotNull Triangle> triangles = new ArrayList<>();
-
-    public TrianglesBlock(Tokenizer file) {
-        while(!file.current().test("end")) {
-            String material = file.next().value;
-            file.next().expectLine();
-            triangles.add(new Triangle(
-                    material,
-                    readVertex(file),
-                    readVertex(file),
-                    readVertex(file)
-            ));
-        }
-        file.next().expect("end");
-        file.next().expectLine();
-    }
-
-    private Vertex readVertex(Tokenizer file) {
-        Vertex vertex = new Vertex(
-                file.next().toInt(), // parent bone
-                file.next().toFloat(), file.next().toFloat(), file.next().toFloat(), // pos
-                file.next().toFloat(), file.next().toFloat(), file.next().toFloat(), // normal
-                file.next().toFloat(), file.next().toFloat() // uv
-        );
-
-        if(!file.current().test("\n")) {
-            int linkCount = file.next().toInt();
-            for (int i = 0; i < linkCount; i++) {
-                vertex.links.add(new Link(file.next().toInt(), file.next().toFloat()));
-            }
-        }
-
-        file.next().expectLine();
-        return vertex;
-    }
 
     public static class Triangle {
         public @NotNull String material;
