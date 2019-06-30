@@ -24,13 +24,17 @@ public class Tokenizer {
             String line = lines.get(lineNum);
             Matcher matcher = tokenPattern.matcher(line);
             while(matcher.find()) {
-                tokens.add(new Token(matcher.group(), lineNum + 1, matcher.start() + 1));
+                tokens.add(new Token(matcher.group(), lineNum, matcher.start()));
             }
             int end = line.indexOf('\r');
             if(end < 0) end = line.indexOf('\n');
             if(end < 0) end = line.length();
-            tokens.add(new Token("\n", lineNum + 1, end));
+            tokens.add(new Token("\n", lineNum, end));
         }
+    }
+
+    public void reset() {
+        index = 0;
     }
 
     public int getIndex() {

@@ -18,6 +18,6 @@ public class ParseException extends RuntimeException {
     }
 
     public static String formatMessage(String message, Token token) {
-        return String.format("%s at %d:%d", message, token.line, token.column);
+        return String.format("%s at %d:%d", message, token.line + 1, token.column + 1);
     }
 }

@@ -12,12 +12,16 @@ public class TrianglesBlock extends SMDFileBlock {
     public static class Triangle {
         public @NotNull String material;
         public @NotNull Vertex v1, v2, v3;
+        public @NotNull List<@NotNull Vertex> vertices = new ArrayList<>();
 
         public Triangle(@NotNull String material, @NotNull Vertex v1, @NotNull Vertex v2, @NotNull Vertex v3) {
             this.material = material;
             this.v1 = v1;
             this.v2 = v2;
             this.v3 = v3;
+            this.vertices.add(v1);
+            this.vertices.add(v2);
+            this.vertices.add(v3);
         }
 
         @Override

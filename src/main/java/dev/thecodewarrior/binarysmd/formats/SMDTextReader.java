@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
 
-public class SMDTextFormat {
+public class SMDTextReader {
 
     public SMDFile read(@NotNull BufferedReader data) {
         SMDFile file = new SMDFile();
