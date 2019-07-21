@@ -8,7 +8,7 @@ import java.io.BufferedReader;
 
 public class SMDTextReader {
 
-    public SMDFile read(@NotNull BufferedReader data) {
+    public SMDFile read(@NotNull String data) {
         SMDFile file = new SMDFile();
         Tokenizer tokenizer = new Tokenizer(data);
         tokenizer.next().expect("version");
@@ -41,7 +41,7 @@ public class SMDTextReader {
         NodesBlock block = new NodesBlock();
 
         while(!file.current().test("end")) {
-            block.bones.add(new NodesBlock.Bone(file.next().toInt(), file.next().toString(), file.next().toInt()));
+            block.bones.add(new NodesBlock.Bone(file.next().toInt(), file.next().toQuotedString(), file.next().toInt()));
             file.next().expectLine();
         }
         file.next().expect("end");
@@ -84,6 +84,9 @@ public class SMDTextReader {
 
         while(!file.current().test("end")) {
             String material = file.next().value;
+            while(!file.current().testLine()) {
+                material += file.current().whitespaceBefore + file.next().value;
+            }
             file.next().expectLine();
             block.triangles.add(new TrianglesBlock.Triangle(
                     material,

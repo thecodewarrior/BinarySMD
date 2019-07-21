@@ -8,7 +8,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 
 public class SMDTextWriter {
-    public void write(@NotNull SMDFile file, @NotNull BufferedWriter data) throws IOException {
+    public @NotNull String write(@NotNull SMDFile file) throws IOException {
         TokenPrinter tokenPrinter = new TokenPrinter();
         tokenPrinter.print("version").print("1").newline();
         for(SMDFileBlock block : file.blocks) {
@@ -22,8 +22,7 @@ public class SMDTextWriter {
                 writeVertexAnimationBlock((VertexAnimationBlock) block, tokenPrinter);
         }
 
-        data.write(tokenPrinter.toString());
-        data.close();
+        return tokenPrinter.toString();
     }
 
     private void writeNodesBlock(NodesBlock block, TokenPrinter out) {
@@ -51,7 +50,7 @@ public class SMDTextWriter {
     private void writeTrianglesBlock(TrianglesBlock block, TokenPrinter out) {
         out.print("triangles").newline();
         for(TrianglesBlock.Triangle triangle : block.triangles) {
-            out.print(triangle.material).newline();
+            out.printDirect(triangle.material).newline();
             for(TrianglesBlock.Vertex vertex : triangle.vertices) {
                 out.print(vertex.parentBone)
                         .print(vertex.posX).print(vertex.posY).print(vertex.posZ)

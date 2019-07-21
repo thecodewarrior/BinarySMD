@@ -16,15 +16,19 @@ public class Tokenizer {
     private int index = 0;
     private @NotNull List<Token> tokens = new ArrayList<>();
 
-    public Tokenizer(@NotNull BufferedReader data) {
-        Pattern tokenPattern = Pattern.compile("\"[^\"]*\"|\\S+");
+    public Tokenizer(@NotNull String data) {
+        Pattern initialWhitespacePattern = Pattern.compile("^\\s*");
+        Pattern tokenPattern = Pattern.compile("(\"[^\"]*\"|\\S+)(\\s*)");
 
-        List<String> lines = data.lines().collect(Collectors.toList());
-        for (int lineNum = 0; lineNum < lines.size(); lineNum++) {
-            String line = lines.get(lineNum);
+        String[] lines = data.split("\\r?\\n");
+        for (int lineNum = 0; lineNum < lines.length; lineNum++) {
+            String line = lines[lineNum];
             Matcher matcher = tokenPattern.matcher(line);
+            Matcher initialWhitespace = initialWhitespacePattern.matcher(line);
+            String whitespaceBefore = initialWhitespace.find() ? initialWhitespace.group() : "";
             while(matcher.find()) {
-                tokens.add(new Token(matcher.group(), lineNum, matcher.start()));
+                tokens.add(new Token(whitespaceBefore, matcher.group(1), matcher.group(2), lineNum, matcher.start()));
+                whitespaceBefore = matcher.group(2);
             }
             int end = line.indexOf('\r');
             if(end < 0) end = line.indexOf('\n');

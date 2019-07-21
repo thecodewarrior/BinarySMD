@@ -2,10 +2,8 @@ package dev.thecodewarrior.binarysmd.tokenizer;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class TokenPrinter {
     private @NotNull List<@NotNull List<@NotNull Token>> lines = new ArrayList<>();
@@ -20,11 +18,13 @@ public class TokenPrinter {
         return lines.get(lines.size() - 1);
     }
 
-    private void addToken(String token) {
+    @NotNull
+    public TokenPrinter printDirect(String token) {
         if(!currentLine().isEmpty())
             column += separator.length();
         currentLine().add(new Token(token, lines.size() - 1, column));
         column += token.length();
+        return this;
     }
 
     @NotNull
@@ -32,25 +32,25 @@ public class TokenPrinter {
         if(token.matches(".*\\s.*")) {
             throw new IllegalArgumentException("Can't print a token containing whitespace");
         }
-        addToken(token);
+        printDirect(token);
         return this;
     }
 
     @NotNull
     public TokenPrinter printString(String string) {
-        addToken('"' + string + '"');
+        printDirect('"' + string + '"');
         return this;
     }
 
     @NotNull
     public TokenPrinter print(int number) {
-        addToken("" + number);
+        printDirect("" + number);
         return this;
     }
 
     @NotNull
     public TokenPrinter print(float number) {
-        addToken(String.format("%.6f", number));
+        printDirect(String.format("%.6f", number));
         return this;
     }
 
@@ -68,7 +68,7 @@ public class TokenPrinter {
             if(token.value.equals("\n"))
                 newline();
             else
-                addToken(token.value);
+                printDirect(token.value);
         }
         return this;
     }
