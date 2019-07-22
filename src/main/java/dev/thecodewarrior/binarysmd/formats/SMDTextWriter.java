@@ -4,11 +4,8 @@ import dev.thecodewarrior.binarysmd.studiomdl.*;
 import dev.thecodewarrior.binarysmd.tokenizer.TokenPrinter;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-
 public class SMDTextWriter {
-    public @NotNull String write(@NotNull SMDFile file) throws IOException {
+    public @NotNull String write(@NotNull SMDFile file) {
         TokenPrinter tokenPrinter = new TokenPrinter();
         tokenPrinter.print("version").print("1").newline();
         for(SMDFileBlock block : file.blocks) {
@@ -73,7 +70,7 @@ public class SMDTextWriter {
         for(VertexAnimationBlock.Keyframe keyframe : block.keyframes) {
             out.print("time").print(keyframe.time).newline();
             for (VertexAnimationBlock.VertexState state : keyframe.states) {
-                out.print(state.bone)
+                out.print(state.vertex)
                         .print(state.posX).print(state.posY).print(state.posZ)
                         .print(state.normX).print(state.normY).print(state.normZ)
                         .newline();

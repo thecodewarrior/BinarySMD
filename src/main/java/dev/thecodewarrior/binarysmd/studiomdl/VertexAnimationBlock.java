@@ -33,12 +33,12 @@ public class VertexAnimationBlock extends SMDFileBlock {
     }
 
     public static class VertexState {
-        public int bone;
+        public int vertex;
         public float posX, posY, posZ;
         public float normX, normY, normZ;
 
-        public VertexState(int bone, float posX, float posY, float posZ, float normX, float normY, float normZ) {
-            this.bone = bone;
+        public VertexState(int vertex, float posX, float posY, float posZ, float normX, float normY, float normZ) {
+            this.vertex = vertex;
             this.posX = posX;
             this.posY = posY;
             this.posZ = posZ;
@@ -52,7 +52,7 @@ public class VertexAnimationBlock extends SMDFileBlock {
             if (this == o) return true;
             if (!(o instanceof VertexState)) return false;
             VertexState vertexState = (VertexState) o;
-            return bone == vertexState.bone &&
+            return vertex == vertexState.vertex &&
                     Float.compare(vertexState.posX, posX) == 0 &&
                     Float.compare(vertexState.posY, posY) == 0 &&
                     Float.compare(vertexState.posZ, posZ) == 0 &&
@@ -63,7 +63,7 @@ public class VertexAnimationBlock extends SMDFileBlock {
 
         @Override
         public int hashCode() {
-            return Objects.hash(bone, posX, posY, posZ, normX, normY, normZ);
+            return Objects.hash(vertex, posX, posY, posZ, normX, normY, normZ);
         }
     }
 }

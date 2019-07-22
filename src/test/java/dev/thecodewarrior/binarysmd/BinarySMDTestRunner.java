@@ -1,16 +1,15 @@
 package dev.thecodewarrior.binarysmd;
 
+import dev.thecodewarrior.binarysmd.formats.SMDBinaryWriter;
 import dev.thecodewarrior.binarysmd.formats.SMDTextReader;
 import dev.thecodewarrior.binarysmd.formats.SMDTextWriter;
 import dev.thecodewarrior.binarysmd.studiomdl.SMDFile;
-import dev.thecodewarrior.binarysmd.tokenizer.TokenPrinter;
-import dev.thecodewarrior.binarysmd.tokenizer.Tokenizer;
-import org.junit.Assert;
-import org.junit.Test;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
+import org.msgpack.core.MessagePack;
+import org.msgpack.core.MessagePacker;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -21,7 +20,8 @@ import java.nio.file.Paths;
 public class BinarySMDTestRunner {
 
     private static Path testsInput = Paths.get("tests");
-    private static Path testsOutput = Paths.get("output");
+    private static Path textOutput = Paths.get("output_text");
+    private static Path binaryOutput = Paths.get("output_binary");
 
     @DataPoints
     public static String[] files;
@@ -36,9 +36,12 @@ public class BinarySMDTestRunner {
             e.printStackTrace();
             files = new String[] {};
         }
-        deleteDir(testsOutput.toFile());
+
+        deleteDir(textOutput.toFile());
+        deleteDir(binaryOutput.toFile());
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private static void deleteDir(File file) {
         File[] contents = file.listFiles();
         if (contents != null) {
@@ -51,26 +54,28 @@ public class BinarySMDTestRunner {
         file.delete();
     }
 
-    @SuppressWarnings("SimplifiableJUnitAssertion")
     @Theory
-    public void temporaryTest(String file) throws IOException {
+    public void text2text(String file) throws IOException {
         String input = new String(Files.readAllBytes(testsInput.resolve(file)));
         SMDFile parsed = new SMDTextReader().read(input);
 
-//        TokenPrinter printer = new TokenPrinter();
-//        printer.print(new Tokenizer(input));
-//        String tokenReprint = printer.toString();
         String reprint = new SMDTextWriter().write(parsed);
 
-        Path output = testsOutput.resolve(file);
+        Path output = textOutput.resolve(file);
         Files.createDirectories(output.getParent());
         Files.write(output, reprint.getBytes());
-
-//        Assert.assertTrue(input.equals(tokenReprint));
-//        Assert.assertTrue(input.equals(reprint));
     }
 
-    private String readFile(String filename) throws IOException {
-        return new String(Files.readAllBytes(Paths.get(filename)));
+    @Theory
+    public void text2binary(String file) throws IOException {
+        String input = new String(Files.readAllBytes(testsInput.resolve(file)));
+        SMDFile parsed = new SMDTextReader().read(input);
+
+        Path output = binaryOutput.resolve(file);
+        Files.createDirectories(output.getParent());
+
+        try (MessagePacker packer = MessagePack.newDefaultPacker(Files.newOutputStream(output))) {
+            new SMDBinaryWriter().write(parsed, packer);
+        }
     }
 }

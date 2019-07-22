@@ -19,8 +19,9 @@ end
 
 ### BinarySMD
 ```
-| count (short) |
-  | id (short) | name (string) | parent (short) |
+| block type = 0 (byte) |
+| count (int) |
+  | id (int) | name (string) | parent (int) |
 ```
 
 # Skeleton
@@ -35,9 +36,12 @@ end
 
 ### BinarySMD
 ```
-| frame count (short) |
-  | frame time (int) | bone count (short) |
-    | bone ID (short) | posX (float) | posY (float) | posZ (float) | rotX (float) | rotY (float) | rotZ (float) |
+| block type = 1 (byte) |
+| vector count (int) |
+  | vectorX (float) | vectorY (float) | vectorZ (float) |
+| keyframe count (int) |
+  | keyframe time (int) | bone count (int) |
+    | bone ID (int) | pos index (int) | rot index (int) |
 ```
 
 # Triangles
@@ -53,14 +57,21 @@ end
 
 ### BinarySMD
 ```
-| material count (byte) |
+| block type = 2 (byte) |
+| material count (int) |
   | material name |
 | vector count (int) |
   | vectorX (float) | vectorY (float) | vectorZ (float) |
+| uv count (int) |
+  | U (float) | V (float) |
 | triangle count (int) |
-  | material index (byte) |
-  | parent bone (short) | pos index (int) | normal index (int) | U (float) | V (float) | link count (byte) |
-    | link bone ID (short) | link weight (float) |
+  | material index (int) |
+  | parent bone (int) | pos index (int) | normal index (int) | UV index (int) | link count (int) |
+    | link bone ID (int) | link weight (float) |
+  | parent bone (int) | pos index (int) | normal index (int) | UV index (int) | link count (int) |
+    | link bone ID (int) | link weight (float) |
+  | parent bone (int) | pos index (int) | normal index (int) | UV index (int) | link count (int) |
+    | link bone ID (int) | link weight (float) |
 ```
 
 # Vertexanimation
@@ -75,9 +86,10 @@ end
 
 ### BinarySMD
 ```
+| block type = 3 (byte) |
 | vector count (int) |
   | vectorX (float) | vectorY (float) | vectorZ (float) |
-| frame count (short) |
+| frame count (int) |
   | frame time (int) | vertex count (int) |
     | vertex ID (int) | pos index (int) | normal index (int) |
 ```
