@@ -3,8 +3,18 @@ package dev.thecodewarrior.binarysmd.formats;
 import java.util.*;
 
 public class LookupTable<T> {
+    private Set<T> existing = new HashSet<>();
     private Map<T, Integer> map = new HashMap<>();
     private List<T> list = new ArrayList<>();
+    private boolean singles;
+
+    public LookupTable() {
+        this(true);
+    }
+
+    public LookupTable(boolean singles) {
+        this.singles = singles;
+    }
 
     public int size() {
         return list.size();
@@ -15,7 +25,7 @@ public class LookupTable<T> {
     }
 
     public void add(T value) {
-        if (!map.containsKey(value)) {
+        if((singles || !existing.add(value)) && !map.containsKey(value)) {
             map.put(value, list.size());
             list.add(value);
         }

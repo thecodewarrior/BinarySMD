@@ -6,7 +6,10 @@ Based on [this](https://developer.valvesoftware.com/wiki/Studiomdl_Data).
 `version 1`
 
 ### BinarySMD
-N/A
+```
+| block count (int) |
+  | block type (byte) | block |
+```
 
 # Nodes
 

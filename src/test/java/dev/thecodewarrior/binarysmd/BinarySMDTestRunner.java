@@ -1,15 +1,18 @@
 package dev.thecodewarrior.binarysmd;
 
+import dev.thecodewarrior.binarysmd.formats.SMDBinaryReader;
 import dev.thecodewarrior.binarysmd.formats.SMDBinaryWriter;
 import dev.thecodewarrior.binarysmd.formats.SMDTextReader;
 import dev.thecodewarrior.binarysmd.formats.SMDTextWriter;
 import dev.thecodewarrior.binarysmd.studiomdl.SMDFile;
+import org.junit.Assert;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 import org.msgpack.core.MessagePack;
 import org.msgpack.core.MessagePacker;
+import org.msgpack.core.MessageUnpacker;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -76,6 +79,10 @@ public class BinarySMDTestRunner {
 
         try (MessagePacker packer = MessagePack.newDefaultPacker(Files.newOutputStream(output))) {
             new SMDBinaryWriter().write(parsed, packer);
+        }
+        try (MessageUnpacker unpacker = MessagePack.newDefaultUnpacker(Files.newInputStream(output))) {
+            SMDFile reparsed = new SMDBinaryReader().read(unpacker);
+            Assert.assertEquals(parsed, reparsed);
         }
     }
 }

@@ -9,6 +9,19 @@ import java.util.Objects;
 public class TrianglesBlock extends SMDFileBlock {
     public @NotNull List<@NotNull Triangle> triangles = new ArrayList<>();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TrianglesBlock)) return false;
+        TrianglesBlock that = (TrianglesBlock) o;
+        return triangles.equals(that.triangles);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(triangles);
+    }
+
     public static class Triangle {
         public @NotNull String material;
         public @NotNull Vertex v1, v2, v3;

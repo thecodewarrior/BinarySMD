@@ -9,6 +9,19 @@ import java.util.Objects;
 public class VertexAnimationBlock extends SMDFileBlock {
     public @NotNull List<@NotNull Keyframe> keyframes = new ArrayList<>();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof VertexAnimationBlock)) return false;
+        VertexAnimationBlock that = (VertexAnimationBlock) o;
+        return keyframes.equals(that.keyframes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(keyframes);
+    }
+
     public static class Keyframe {
         public int time;
         public @NotNull List<@NotNull VertexState> states = new ArrayList<>();

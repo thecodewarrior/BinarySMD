@@ -10,6 +10,19 @@ import java.util.Objects;
 public class NodesBlock extends SMDFileBlock {
     public @NotNull List<@NotNull Bone> bones = new ArrayList<>();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof NodesBlock)) return false;
+        NodesBlock that = (NodesBlock) o;
+        return bones.equals(that.bones);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(bones);
+    }
+
     public static class Bone {
         public int id;
         public @NotNull String name;

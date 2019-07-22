@@ -8,7 +8,10 @@ import java.io.IOException;
 import java.util.*;
 
 public class SMDBinaryWriter {
+    // | block count (int) |
+    //   | block |
     public void write(@NotNull SMDFile file, @NotNull MessagePacker packer) throws IOException {
+        packer.packInt(file.blocks.size());
         for(SMDFileBlock block : file.blocks) {
             if(block instanceof NodesBlock)
                 writeNodesBlock((NodesBlock) block, packer);
