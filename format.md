@@ -7,6 +7,7 @@ Based on [this](https://developer.valvesoftware.com/wiki/Studiomdl_Data).
 
 ### BinarySMD
 ```
+| magic `SMDX` | format version (byte) |
 | block count (int) |
   | block type (byte) | block |
 ```

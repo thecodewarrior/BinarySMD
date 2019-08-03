@@ -2,16 +2,31 @@ package dev.thecodewarrior.binarysmd.formats;
 
 import dev.thecodewarrior.binarysmd.studiomdl.*;
 import org.jetbrains.annotations.NotNull;
+import org.msgpack.core.MessageInsufficientBufferException;
 import org.msgpack.core.MessageUnpacker;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class SMDBinaryReader {
 
+    // | magic `SMDX` | format version (byte) |
     // | block count (int) |
     //   | block |
     public SMDFile read(@NotNull MessageUnpacker data) throws IOException {
+        byte[] fileMagic = new byte[SMDBinaryWriter.MAGIC_BYTES.length];
+        try {
+            data.readPayload(fileMagic);
+        } catch (MessageInsufficientBufferException e) {
+            /* fileMagic stays empty, so the following comparison fails */
+        }
+        if(!Arrays.equals(fileMagic, SMDBinaryWriter.MAGIC_BYTES)) {
+            throw new IllegalArgumentException("Passed data is not an smdx file. Missing initial " +
+                    "magic constant `" + SMDBinaryWriter.MAGIC + "`");
+        }
+        int version = data.unpackByte(); // unused at the moment
+
         SMDFile file = new SMDFile();
         int blockCount = data.unpackInt();
         for (int i = 0; i < blockCount; i++) {

@@ -5,12 +5,21 @@ import org.jetbrains.annotations.NotNull;
 import org.msgpack.core.MessagePacker;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class SMDBinaryWriter {
+
+    public static String MAGIC = "SMDX";
+    public static byte[] MAGIC_BYTES = MAGIC.getBytes(StandardCharsets.UTF_8);
+
+    // | magic `SMDX` | format version (byte) |
     // | block count (int) |
     //   | block |
     public void write(@NotNull SMDFile file, @NotNull MessagePacker packer) throws IOException {
+        packer.writePayload(MAGIC_BYTES);
+        int version = 1; // unused at the moment
+        packer.packByte((byte) version);
         packer.packInt(file.blocks.size());
         for(SMDFileBlock block : file.blocks) {
             if(block instanceof NodesBlock)
